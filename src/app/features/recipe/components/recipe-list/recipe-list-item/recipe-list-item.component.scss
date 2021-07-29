@@ -1,0 +1,13 @@
+.recipe-list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid black;
+  cursor: pointer;
+
+  .recipe-buttons {
+    button {
+      margin-left: 10px;
+    }
+  }
+}

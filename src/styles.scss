@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+.loading-spinner {
+  content: "";
+  width: 25px;
+  height: 25px;
+  animation: spinner 1s infinite;
+  border-radius: 50%;
+  border: 2px solid blue;
+}
+
+@keyframes spinner {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.error {
+  color: red;
+}

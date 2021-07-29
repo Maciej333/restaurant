@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
 import { RecipeComponent } from './components/recipe/recipe.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
+import { RecipeListItemComponent } from './components/recipe-list/recipe-list-item/recipe-list-item.component';
 
 
 
@@ -10,7 +11,8 @@ import { RecipeListComponent } from './components/recipe-list/recipe-list.compon
   declarations: [
     RecipeFormComponent,
     RecipeComponent,
-    RecipeListComponent
+    RecipeListComponent,
+    RecipeListItemComponent
   ],
   imports: [
     CommonModule

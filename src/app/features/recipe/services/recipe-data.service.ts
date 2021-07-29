@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { retry } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
 import { Recipe } from 'src/app/core/models/recipe';
 
 @Injectable({
@@ -9,14 +9,17 @@ import { Recipe } from 'src/app/core/models/recipe';
 })
 export class RecipeDataService {
 
-  private static crudcrudApiKey: string  = '3a12b26bd258497c8855afe831798300';
+  private static crudcrudApiKey: string  = '1281e01d10be448384468bade8744f4a';
 
   constructor(private http: HttpClient) { }
 
   public getRecipes(): Observable<Recipe[]> {
     return this.http.get<Recipe[]>(`http://localhost:4200/api/${RecipeDataService.crudcrudApiKey}/recipe`)
       .pipe(
-        retry(2)
+        retry(2),
+        catchError(error => {
+          throw 'error fetching recipes : ' + error;
+        })
       );
   }
 

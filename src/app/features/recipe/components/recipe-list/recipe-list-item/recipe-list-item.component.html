@@ -1,0 +1,10 @@
+<div class="recipe-list-item" (click)="showRecipe()">
+  {{recipe.name}}
+
+  <div class="recipe-buttons">
+    <button (click)="editRecipe($event)">Edit</button>
+    <button (click)="deleteRecipe($event)">Delete</button>
+  </div>
+</div>
+
+

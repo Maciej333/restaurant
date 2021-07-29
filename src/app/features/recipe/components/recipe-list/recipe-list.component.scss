@@ -1,0 +1,15 @@
+aside {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  gap: 20px;
+
+  & .recipe-list {
+    @extend aside;
+    gap: 10px;
+  }
+}
+
+.center {
+  justify-self: center;
+}
