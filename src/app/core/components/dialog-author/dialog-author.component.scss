@@ -1,0 +1,14 @@
+div.col-2 {
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.mat-dialog-actions {
+  justify-content: flex-end;
+}

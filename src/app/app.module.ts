@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { NotFoundModule } from './features/not-found/not-found.module';
 import { RecipeModule } from './features/recipe/recipe.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -18,9 +19,10 @@ import { RecipeModule } from './features/recipe/recipe.module';
     AppRoutingModule,
     RecipeModule,
     NotFoundModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
