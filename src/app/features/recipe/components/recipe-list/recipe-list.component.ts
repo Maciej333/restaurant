@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Recipe } from 'src/app/core/models/recipe';
+import { RecipeComponentsComunicationService } from '../../services/recipe-components-comunication.service';
 import { RecipeDataService } from '../../services/recipe-data.service';
 
 @Component({
@@ -11,16 +12,27 @@ import { RecipeDataService } from '../../services/recipe-data.service';
   styleUrls: ['./recipe-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RecipeListComponent implements OnInit {
+export class RecipeListComponent implements OnInit, OnDestroy {
 
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   error$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   recipeList$: BehaviorSubject<Recipe[]> = new BehaviorSubject<Recipe[]>([]);
   recipes: Recipe[] = [];
 
-  constructor(private recipeService: RecipeDataService, private router: Router) { }
+  fetchRecipesSubscription: Subscription = new Subscription();
+
+  constructor(private recipeService: RecipeDataService, private router: Router, private recipeComponentComunication: RecipeComponentsComunicationService) { }
 
   ngOnInit(): void {
+    this.fetchRecipesSubscription = this.recipeComponentComunication.fetchRecipes$.subscribe(data => {
+      if(data){
+        this.loadRecipes();
+      }
+    })
+    this.loadRecipes();
+  }
+
+  loadRecipes(): void {
     this.loading$.next(true);
     this.recipeService.getRecipes()
     .subscribe(
@@ -33,8 +45,7 @@ export class RecipeListComponent implements OnInit {
         this.error$.next(error);
         this.loading$.next(false);
       }
-    );
-  }
+    );  }
 
   searchRecipe(event: KeyboardEvent): void {
     const filteredRecipes = this.recipes.filter(recipe => {
@@ -48,5 +59,9 @@ export class RecipeListComponent implements OnInit {
 
   showCreateRecipeForm(): void {
     this.router.navigateByUrl('/create/recipe')
+  }
+
+  ngOnDestroy(): void {
+    this.fetchRecipesSubscription.unsubscribe();
   }
 }
