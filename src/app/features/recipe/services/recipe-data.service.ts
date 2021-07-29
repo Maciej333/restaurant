@@ -9,7 +9,7 @@ import { Recipe } from 'src/app/core/models/recipe';
 })
 export class RecipeDataService {
 
-  private static crudcrudApiKey: string  = '1281e01d10be448384468bade8744f4a';
+  private static crudcrudApiKey: string  = '17fa0b8fb7c646e98c313f244f0a21ba';
 
   constructor(private http: HttpClient) { }
 
@@ -23,8 +23,8 @@ export class RecipeDataService {
       );
   }
 
-  public getRecipe(id: string): Observable<Recipe[]> {
-    return this.http.get<Recipe[]>(`http://localhost:4200/api/${RecipeDataService.crudcrudApiKey}/recipe/${id}`)
+  public getRecipe(id: string): Observable<Recipe> {
+    return this.http.get<Recipe>(`http://localhost:4200/api/${RecipeDataService.crudcrudApiKey}/recipe/${id}`)
       .pipe(
         retry(2)
       );
