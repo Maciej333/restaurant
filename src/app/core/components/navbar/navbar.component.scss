@@ -1,0 +1,19 @@
+nav {
+  display: flex;
+  margin: 20px 5px;
+  justify-content: space-between;
+
+  div {
+    font-size: 1rem;
+    text-align: center;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  nav {
+    margin: 50px 50px;
+    div {
+      font-size: 1.5rem;
+    }
+  }
+}
