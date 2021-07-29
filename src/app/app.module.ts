@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -16,7 +17,8 @@ import { RecipeModule } from './features/recipe/recipe.module';
     CoreModule,
     AppRoutingModule,
     RecipeModule,
-    NotFoundModule
+    NotFoundModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

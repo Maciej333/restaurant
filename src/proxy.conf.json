@@ -1,0 +1,8 @@
+{
+  "/api/*": {
+    "target": "https://crudcrud.com",
+    "secure": true,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}
