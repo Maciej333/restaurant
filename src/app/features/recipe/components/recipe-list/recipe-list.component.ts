@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Recipe } from 'src/app/core/models/recipe';
@@ -17,7 +18,7 @@ export class RecipeListComponent implements OnInit {
   recipeList$: BehaviorSubject<Recipe[]> = new BehaviorSubject<Recipe[]>([]);
   recipes: Recipe[] = [];
 
-  constructor(private recipeService: RecipeDataService) { }
+  constructor(private recipeService: RecipeDataService, private router: Router) { }
 
   ngOnInit(): void {
     this.loading$.next(true);
@@ -43,5 +44,9 @@ export class RecipeListComponent implements OnInit {
       return null;
     })
     this.recipeList$.next(filteredRecipes);
+  }
+
+  showCreateRecipeForm(): void {
+    this.router.navigateByUrl('/create/recipe')
   }
 }

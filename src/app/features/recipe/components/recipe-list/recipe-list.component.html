@@ -1,6 +1,7 @@
 <aside *ngIf="{loading: loading$ | async, error: error$ | async} as properties">
 
   <input type="text" placeholder="search" (keyup)="searchRecipe($event)">
+  <button (click)="showCreateRecipeForm()">Add new recipe</button>
 
   <div class="recipe-list" *ngIf="!properties.loading && !properties.error">
     <app-recipe-list-item *ngFor="let recipe of (recipeList$ | async)" [recipe]="recipe"></app-recipe-list-item>

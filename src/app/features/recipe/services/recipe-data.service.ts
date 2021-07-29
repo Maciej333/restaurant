@@ -9,7 +9,7 @@ import { Recipe } from 'src/app/core/models/recipe';
 })
 export class RecipeDataService {
 
-  private static crudcrudApiKey: string  = '17fa0b8fb7c646e98c313f244f0a21ba';
+  private static crudcrudApiKey: string  = 'c296e22bd9ab43e6ab55c88556642a15';
 
   constructor(private http: HttpClient) { }
 
