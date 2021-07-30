@@ -31,6 +31,7 @@ export class RecipeListItemComponent {
   editRecipe(event: Event): void {
     event.stopPropagation();
     this.router.navigateByUrl(`/recipe/edit/${this.recipe?._id}`)
+    this.recipeComponentComunication.refreshForm();
   }
 
   deleteRecipe(event: Event): void {
@@ -39,11 +40,16 @@ export class RecipeListItemComponent {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose =  true;
     const dialogRef = this.matDialog.open(RecipeDeleteDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(data => {
-      if(data){
-        this.callDelete();
+    dialogRef.afterClosed().subscribe(
+      data => {
+        if(data){
+          this.callDelete();
+        }
+      },
+      error => {
+
       }
-    })
+    )
   }
 
   callDelete(): void {

@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/core/models/ingredient';
+import { RecipeComponentsComunicationService } from '../../services/recipe-components-comunication.service';
 import { RecipeDataService } from '../../services/recipe-data.service';
 
 @Component({
@@ -10,11 +12,15 @@ import { RecipeDataService } from '../../services/recipe-data.service';
   styleUrls: ['./recipe-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RecipeFormComponent implements OnInit {
+export class RecipeFormComponent implements OnInit, OnDestroy {
 
+  loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  message$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  refreshSubscription: Subscription = new Subscription();
   recipeForm: FormGroup = new FormGroup({});
   recipeId: string = '';
-  constructor(private formBuilder: FormBuilder,private recipeService: RecipeDataService, private activeRoute: ActivatedRoute) { }
+  constructor(private formBuilder: FormBuilder,private recipeService: RecipeDataService, private activeRoute: ActivatedRoute, private recipeComunicationService: RecipeComponentsComunicationService) {
+  }
 
   ngOnInit(): void {
     this.activeRoute.params.subscribe(params => {
@@ -25,13 +31,22 @@ export class RecipeFormComponent implements OnInit {
         this.createForm();
         this.recipeId = '';
       }
-    })
+    });
+    this.refreshSubscription = this.recipeComunicationService.refreshForm$.subscribe(data => {
+      this.message$.next('');
+    });
   }
 
   fetchRecipeData(id: string): void {
+    this.loading$.next(true);
     this.recipeService.getRecipe(id).subscribe(
       recipe => {
+        this.loading$.next(false);
         this.createForm(recipe.name, recipe.preparationTimeInMinutes, recipe.description, recipe.ingredients);
+      },
+      error => {
+        this.loading$.next(false);
+        this.message$.next('error fetch');
       }
     );
   }
@@ -120,29 +135,54 @@ export class RecipeFormComponent implements OnInit {
   }
 
   addRecipe(): void {
+    this.loading$.next(true);
     this.recipeService.addRecipe({
       name: this.name.value,
       preparationTimeInMinutes: this.preparationTime.value,
       description: this.description.value,
       ingredients: this.ingredients.value
-    }).subscribe(data => {
-
-    });
+    }).subscribe(
+      data => {
+        this.loading$.next(false);
+        this.message$.next("new recipe was added");
+        this.recipeComunicationService.fetchRecipes$.next(true);
+      },
+      error => {
+        this.loading$.next(false);
+        this.message$.next("error create");
+      },
+      () => {
+        this.cancelRecipeForm();
+      }
+    );
   }
 
   updateRecipe(): void {
+    this.loading$.next(true);
     this.recipeService.editRecipe({
       _id: this.recipeId,
       name: this.name.value,
       preparationTimeInMinutes: this.preparationTime.value,
       description: this.description.value,
       ingredients: this.ingredients.value
-    }).subscribe(data => {
-      
-    });
+    }).subscribe(
+      data => {
+        this.loading$.next(false);
+        this.message$.next("recipe was updated");
+        this.recipeComunicationService.fetchRecipes$.next(true);
+      },
+      error => {
+        this.loading$.next(false);
+        this.message$.next("error update");
+      }
+    );
   }
 
   cancelRecipeForm(): void {
     this.recipeForm.reset();
+  }
+
+  ngOnDestroy(): void {
+    this.refreshSubscription.unsubscribe();
   }
 }

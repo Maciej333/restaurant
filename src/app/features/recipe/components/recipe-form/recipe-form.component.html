@@ -1,56 +1,69 @@
-<form [formGroup]="recipeForm" (ngSubmit)="submitRecipeForm($event)">
+<ng-container *ngIf="{loading: loading$ | async, message: message$ | async} as properties">
 
-  <div class="form-error error-col-2" *ngIf="name.errors && name.touched">
-    Name is required and name length should be between 3 and 80 characters
-  </div>
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" formControlName="name">
-
-  <div class="form-error error-col-2" *ngIf="preparationTime.errors && preparationTime.touched">
-    Preparation time is required and should be a number
-  </div>
-  <label for="preparationTime">Preparation time:</label>
-  <input type="number" id="preparationTime" name="preparationTime" formControlName="preparationTime">
-
-  <div class="form-error error-col-2" *ngIf="description.errors && description.touched">
-    Description is required and length should be between 15 and 255 characters
-  </div>
-  <label for="description">Description:</label>
-  <textarea cols="30" rows="4" id="description" name="description" formControlName="description"></textarea>
-
-  <div class="form-error error-col-2" *ngIf="ingredients.errors && ingredients.touched">
-    Ingredients is required and should contain min 2 elements
-  </div>
-  <label for="ingredients">Ingredients:</label>
-    <div class="ingredients" formArrayName="ingredients">
-    <div class="col-3">
-      <span>
-        Name:
-      </span>
-      <span>
-        Quantity:
-      </span>
-      <span>
-        Delete:
-      </span>
+  <form *ngIf="!properties.loading && !properties.message" [formGroup]="recipeForm" (ngSubmit)="submitRecipeForm($event)">
+    <div class="form-error error-col-2" *ngIf="name.errors && name.touched">
+      Name is required and name length should be between 3 and 80 characters
     </div>
-    <ng-container  *ngFor="let ingredient of ingredients.controls; let i = index" >
-      <div class="col-3" [formGroupName]="i">
-        <div class="form-error error-col-3" *ngIf="!ingredient.valid && ingredient.touched">
-          ingredient name and quantity are required
-        </div>
-        <input formControlName="name" type="text" placeholder="{{ingredient.value.name}}">
-        <input formControlName="quantity" type="text" placeholder="{{ingredient.value.quantity}}">
-        <div class="btn" (click)="deleteIngredient(i)">Delete</div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" formControlName="name">
+
+    <div class="form-error error-col-2" *ngIf="preparationTime.errors && preparationTime.touched">
+      Preparation time is required and should be a number
+    </div>
+    <label for="preparationTime">Preparation time:</label>
+    <input type="number" id="preparationTime" name="preparationTime" formControlName="preparationTime">
+
+    <div class="form-error error-col-2" *ngIf="description.errors && description.touched">
+      Description is required and length should be between 15 and 255 characters
+    </div>
+    <label for="description">Description:</label>
+    <textarea cols="30" rows="4" id="description" name="description" formControlName="description"></textarea>
+
+    <div class="form-error error-col-2" *ngIf="ingredients.errors && ingredients.touched">
+      Ingredients is required and should contain min 2 elements
+    </div>
+    <label for="ingredients">Ingredients:</label>
+      <div class="ingredients" formArrayName="ingredients">
+      <div class="col-3">
+        <span>
+          Name:
+        </span>
+        <span>
+          Quantity:
+        </span>
+        <span>
+          Delete:
+        </span>
       </div>
-    </ng-container>
-    <div class="col-3">
-      <div class="btn btn-ingredient" (click)="addIngredient()">Add ingredient</div>
+      <ng-container  *ngFor="let ingredient of ingredients.controls; let i = index" >
+        <div class="col-3" [formGroupName]="i">
+          <div class="form-error error-col-3" *ngIf="!ingredient.valid && ingredient.touched">
+            ingredient name and quantity are required
+          </div>
+          <input formControlName="name" type="text" placeholder="{{ingredient.value.name}}">
+          <input formControlName="quantity" type="text" placeholder="{{ingredient.value.quantity}}">
+          <div class="btn" (click)="deleteIngredient(i)">Delete</div>
+        </div>
+      </ng-container>
+      <div class="col-3">
+        <div class="btn btn-ingredient" (click)="addIngredient()">Add ingredient</div>
+      </div>
     </div>
+
+    <div class="buttons">
+      <button type="submit" [disabled]="!recipeForm.valid">Submit</button>
+      <div class="btn" (click)="cancelRecipeForm()">Cancel</div>
+    </div>
+  </form>
+
+  <div class="center loading-spinner" *ngIf="properties.loading && !properties.message">
   </div>
 
-  <div class="buttons">
-    <button type="submit" [disabled]="!recipeForm.valid">Submit</button>
-    <div class="btn" (click)="cancelRecipeForm()">Cancel</div>
+  <div *ngIf="!properties.loading && properties.message">
+    <ng-container *ngIf="(properties.message.includes('error'))">
+      <p class="error">Server error, cannot {{ properties.message.replace('error ','') }} recipe</p>
+    </ng-container>
+    <p *ngIf="!(properties.message.includes('error'))">{{properties.message}}</p>
   </div>
-</form>
+
+</ng-container>

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Recipe } from 'src/app/core/models/recipe';
 import { RecipeComponentsComunicationService } from '../../services/recipe-components-comunication.service';
 import { RecipeDataService } from '../../services/recipe-data.service';
@@ -28,7 +27,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       if(data){
         this.loadRecipes();
       }
-    })
+    });
     this.loadRecipes();
   }
 
@@ -58,7 +57,8 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   showCreateRecipeForm(): void {
-    this.router.navigateByUrl('/create/recipe')
+    this.router.navigateByUrl('/create/recipe');
+    this.recipeComponentComunication.refreshForm();
   }
 
   ngOnDestroy(): void {

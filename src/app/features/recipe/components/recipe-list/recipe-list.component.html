@@ -3,8 +3,15 @@
   <input type="text" placeholder="search" (keyup)="searchRecipe($event)">
   <button (click)="showCreateRecipeForm()">Add new recipe</button>
 
-  <div class="recipe-list" *ngIf="!properties.loading && !properties.error">
-    <app-recipe-list-item *ngFor="let recipe of (recipeList$ | async)" [recipe]="recipe"></app-recipe-list-item>
+  <div *ngIf="!properties.loading && !properties.error">
+    <ng-container *ngIf="(recipeList$ | async) as recipeList">
+      <div class="recipe-list" *ngIf="(recipeList.length > 0)">
+        <app-recipe-list-item *ngFor="let recipe of recipeList" [recipe]="recipe"></app-recipe-list-item>
+      </div>
+      <div *ngIf="recipeList.length === 0">
+        <p>Recipe list empty, create new recipe</p>
+      </div>
+    </ng-container>
   </div>
 
   <div class="center loading-spinner" *ngIf="properties.loading && !properties.error">
