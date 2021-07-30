@@ -47,9 +47,15 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     );  }
 
   searchRecipe(event: KeyboardEvent): void {
+    const searchValue: string = (event.target as HTMLInputElement).value.trim().toLocaleLowerCase();
     const filteredRecipes = this.recipes.filter(recipe => {
-      if(recipe.name.toLocaleLowerCase().includes((event.target as HTMLInputElement).value.trim().toLocaleLowerCase())){
+      if(recipe.name.toLocaleLowerCase().includes(searchValue)){
         return recipe;
+      }
+      for(let ingredient of recipe.ingredients){
+        if(ingredient.name.toLocaleLowerCase().includes(searchValue)){
+          return recipe;
+        }
       }
       return null;
     })
