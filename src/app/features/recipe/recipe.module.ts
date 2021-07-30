@@ -7,6 +7,7 @@ import { RecipeListItemComponent } from './components/recipe-list/recipe-list-it
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RecipeDeleteDialogComponent } from './components/recipe-list/recipe-delete-dialog/recipe-delete-dialog.component';
+import { CoreModule } from 'src/app/core/core.module';
 
 
 
@@ -21,7 +22,8 @@ import { RecipeDeleteDialogComponent } from './components/recipe-list/recipe-del
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    CoreModule
   ],
   exports: [
     RecipeFormComponent,

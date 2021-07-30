@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DialogAuthorComponent } from './components/dialog-author/dialog-author.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon'
+import { MatIconModule } from '@angular/material/icon';
+import { TimeTransformPipe } from './pipes/time-transform.pipe'
 
 
 @NgModule({
   declarations: [
     NavbarComponent,
-    DialogAuthorComponent
+    DialogAuthorComponent,
+    TimeTransformPipe
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,8 @@ import { MatIconModule } from '@angular/material/icon'
     DialogAuthorComponent
   ],
   exports: [
-    NavbarComponent
+    NavbarComponent,
+    TimeTransformPipe
   ],
 })
 export class CoreModule { }
