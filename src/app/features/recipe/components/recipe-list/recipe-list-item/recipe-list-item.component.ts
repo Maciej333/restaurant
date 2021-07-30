@@ -45,9 +45,6 @@ export class RecipeListItemComponent {
         if(data){
           this.callDelete();
         }
-      },
-      error => {
-
       }
     )
   }
@@ -59,7 +56,7 @@ export class RecipeListItemComponent {
         this.router.navigateByUrl(`/recipe`);
       },
       (error) => {
-
+        alert("server error cannot delete recipe");
       }
     )
   }

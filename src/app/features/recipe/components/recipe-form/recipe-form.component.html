@@ -37,9 +37,6 @@
       </div>
       <ng-container  *ngFor="let ingredient of ingredients.controls; let i = index" >
         <div class="col-3" [formGroupName]="i">
-          <div class="form-error error-col-3" *ngIf="!ingredient.valid && ingredient.touched">
-            ingredient name and quantity are required
-          </div>
           <input formControlName="name" type="text" placeholder="{{ingredient.value.name}}">
           <input formControlName="quantity" type="text" placeholder="{{ingredient.value.quantity}}">
           <div class="btn" (click)="deleteIngredient(i)">Delete</div>

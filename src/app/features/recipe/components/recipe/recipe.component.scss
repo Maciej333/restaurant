@@ -1,3 +1,14 @@
+.buttons {
+  max-width: 700px;
+  margin: 0 auto 25px;
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    margin-left: 10px;
+  }
+}
+
 .col-2 {
   display: grid;
   max-width: 700px;

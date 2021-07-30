@@ -9,7 +9,7 @@ import { Recipe } from 'src/app/core/models/recipe';
 })
 export class RecipeDataService {
 
-  private static crudcrudApiKey: string  = '5f2e4242fd6f485e92f269cb41aae29e';
+  private static crudcrudApiKey: string  = 'b73d869bf7404989ae4c85a578635cb1';
 
   constructor(private http: HttpClient) { }
 
@@ -28,7 +28,7 @@ export class RecipeDataService {
       .pipe(
         retry(2),
         catchError(error => {
-          throw 'error fetching recipes : ' + error;
+          throw 'error fetching recipes : ' + error.error;
         })
       );
   }

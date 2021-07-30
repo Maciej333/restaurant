@@ -1,40 +1,49 @@
-<div *ngIf="( recipe$ | async ) as recipe">
-  <div *ngIf="recipe?._id">
-    <div class="col-2">
-      <span>
-        name
-      </span>
-      <span class="grid-flex-start">
-        {{recipe.name}}
-      </span>
-      <span>
-        preparation time
-      </span>
-      <span class="grid-flex-start">
-        {{recipe.preparationTimeInMinutes | timeTransform}}
-      </span>
-      <span>
-        description
-      </span>
-      <span class="grid-flex-start">
-        {{recipe.description}}
-      </span>
-      <span>
-        ingredients
-      </span>
-      <div class="grid-flex-start">
-        <div class="col-2">
-          <span>name</span>
-          <span>quantity</span>
-        </div>
-        <div class="col-2" *ngFor="let ingredient of recipe.ingredients">
-          <span>{{ingredient.name}}</span>
-          <span>{{ingredient.quantity}}</span>
+<ng-container *ngIf="(error$ | async) as error">
+  <p *ngIf="!(error === 'none')">
+    {{error}}
+  </p>
+  <div *ngIf="( recipe$ | async ) as recipe">
+    <div class="buttons" *ngIf="recipe?._id">
+      <button (click)="showEditForm()">Edit</button>
+      <button (click)="showDeleteDialog()">Delete</button>
+    </div>
+    <div *ngIf="recipe?._id">
+      <div class="col-2">
+        <span>
+          name
+        </span>
+        <span class="grid-flex-start">
+          {{recipe.name}}
+        </span>
+        <span>
+          preparation time
+        </span>
+        <span class="grid-flex-start">
+          {{recipe.preparationTimeInMinutes | timeTransform}}
+        </span>
+        <span>
+          description
+        </span>
+        <span class="grid-flex-start">
+          {{recipe.description}}
+        </span>
+        <span>
+          ingredients
+        </span>
+        <div class="grid-flex-start">
+          <div class="col-2">
+            <span>name</span>
+            <span>quantity</span>
+          </div>
+          <div class="col-2" *ngFor="let ingredient of recipe.ingredients">
+            <span>{{ingredient.name}}</span>
+            <span>{{ingredient.quantity}}</span>
+          </div>
         </div>
       </div>
     </div>
+    <div *ngIf="!recipe?._id && (error === 'none')">
+      Select recipe from the list on the left, or create new recipe
+    </div>
   </div>
-  <div *ngIf="!recipe?._id">
-    Select recipe from the list on the left, or create new recipe
-  </div>
-</div>
+</ng-container>
