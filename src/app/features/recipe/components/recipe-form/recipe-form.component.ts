@@ -3,6 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/core/models/ingredient';
+import { Recipe } from 'src/app/core/models/recipe';
 import { RecipeComponentsComunicationService } from '../../services/recipe-components-comunication.service';
 import { RecipeDataService } from '../../services/recipe-data.service';
 
@@ -19,6 +20,12 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   refreshSubscription: Subscription = new Subscription();
   recipeForm: FormGroup = new FormGroup({});
   recipeId: string = '';
+  fetchRecipe: Recipe = {
+    name: '',
+    preparationTimeInMinutes: 0,
+    description: '',
+    ingredients: []
+  }
   constructor(private formBuilder: FormBuilder,private recipeService: RecipeDataService, private activeRoute: ActivatedRoute, private recipeComunicationService: RecipeComponentsComunicationService) {
   }
 
@@ -42,6 +49,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     this.recipeService.getRecipe(id).subscribe(
       recipe => {
         this.loading$.next(false);
+        this.fetchRecipe = recipe;
         this.createForm(recipe.name, recipe.preparationTimeInMinutes, recipe.description, recipe.ingredients);
       },
       error => {
@@ -174,12 +182,28 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
       error => {
         this.loading$.next(false);
         this.message$.next("error update");
+      },
+      () => {
+        this.updateFetchRecipe();
       }
     );
   }
 
+  updateFetchRecipe(): void {
+    this.fetchRecipe = {
+      name: this.name.value,
+      preparationTimeInMinutes: this.preparationTime.value,
+      description: this.description.value,
+      ingredients: this.ingredients.value
+    }
+  }
+
   cancelRecipeForm(): void {
     this.recipeForm.reset();
+    let ingredientsLength = this.ingredients.length;
+    for(let i = ingredientsLength-1; i >= 0; i--){
+      this.deleteIngredient(i);
+    }
   }
 
   ngOnDestroy(): void {
