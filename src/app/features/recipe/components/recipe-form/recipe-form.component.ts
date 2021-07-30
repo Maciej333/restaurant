@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Ingredient } from 'src/app/core/models/ingredient';
 import { Recipe } from 'src/app/core/models/recipe';
 import { RecipeComponentsComunicationService } from '../../services/recipe-components-comunication.service';
@@ -64,7 +65,8 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
       name: [
         nameVar,
         {
-          validators: [Validators.required, Validators.minLength(3), Validators.maxLength(80)]
+          validators: [Validators.required, Validators.minLength(3), Validators.maxLength(80)],
+          asyncValidators: [this.recipeNameValidator.bind(this)],
         }
       ],
       preparationTime: [
@@ -209,4 +211,23 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.refreshSubscription.unsubscribe();
   }
+
+  recipeNameValidator(control: AbstractControl): Promise< ValidationErrors | null> | Observable< ValidationErrors | null > {
+    return this.recipeService.getRecipes()
+    .pipe(
+      map(
+        recipes => {
+          let nameExist: boolean = false;
+          const searchName: string = control.value;
+          for(let recipe of recipes){
+            if(recipe.name === searchName){
+              nameExist = true;
+            }
+          }
+          return nameExist ? { nameExist: true } : null;
+        }
+      )
+    );
+  }
+
 }

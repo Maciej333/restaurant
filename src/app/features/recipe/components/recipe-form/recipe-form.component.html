@@ -1,7 +1,10 @@
 <ng-container *ngIf="{loading: loading$ | async, message: message$ | async} as properties">
 
   <form *ngIf="!properties.loading && !properties.message" [formGroup]="recipeForm" (ngSubmit)="submitRecipeForm($event)">
-    <div class="form-error error-col-2" *ngIf="name.errors && name.touched">
+    <div class="form-error error-col-2" *ngIf="name.errors?.nameExist && name.touched">
+      Given name is used by other recipe
+    </div>
+    <div class="form-error error-col-2" *ngIf="name.errors && !name.errors?.nameExist && name.touched">
       Name is required and name length should be between 3 and 80 characters
     </div>
     <label for="name">Name:</label>
